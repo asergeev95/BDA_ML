@@ -11,7 +11,7 @@ def calculate_accuracy(predicted, targets):
     return accuracy/len(predicted)
 
 cancer = load_breast_cancer()
-train_targets, test_targets, train_datas, test_datas =  train_test_split(cancer.target, cancer.data, test_size = 0.2, random_state=5)
+train_targets, test_targets, train_datas, test_datas =  train_test_split(cancer.target, cancer.data, test_size = 0.3, random_state=5)
 
 cp = MyLogisticRegression() 
 cp.fit(train_datas, train_targets) 
