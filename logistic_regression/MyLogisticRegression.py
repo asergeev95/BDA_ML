@@ -35,9 +35,9 @@ class MyLogisticRegression(BaseEstimator, ClassifierMixin):
         return weights
     
     def improve_weights(self, weights):
-        predictions = self.predict_with_weights(self.train_features, weights) #predict targets by current weights
-        gradient = np.dot(self.train_features.T,  predictions - self.train_targets) #calculate gradient
-        improved_weights = weights - self.learning_rate * gradient #get improved weights
+        predictions = self.predict_with_weights(self.train_features, weights) 
+        gradient = np.dot(self.train_features.T,  predictions - self.train_targets)
+        improved_weights = weights - self.learning_rate * gradient
         return improved_weights
     
     def predict_with_weights(self, features, weights):
