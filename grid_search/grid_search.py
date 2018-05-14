@@ -17,8 +17,8 @@ knn.fit(train_data, train_targets)
 knn_predicted = knn.predict(test_data)
 print(roc_auc_score(test_targets, knn_predicted))
 
-#svm_parameters = [{'C': [0.1, 1, 10], 'kernel': ['linear']},{'C': [0.1, 1, 10], 'gamma': [0.001, 0.0001], 'kernel': ['rbf']}]
-svm_parameters = {'kernel':('linear', 'rbf'), 'C':[1, 10]}
+svm_parameters = [{'C': [0.1, 1, 10], 'kernel': ['linear']},{'C': [0.1, 1, 10], 'gamma': [0.001, 0.0001], 'kernel': ['rbf']}]
+#svm_parameters = {'kernel':('linear', 'rbf'), 'C':[1, 10]}
 svc = GridSearchCV(SVC(), svm_parameters, verbose=2, scoring='roc_auc')
 svc.fit(train_data, train_targets) 
 svc_predicted = svc.predict(test_data)
