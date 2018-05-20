@@ -12,7 +12,6 @@ class MyDecisionTree(BaseEstimator, ClassifierMixin):
             self.right = right
         
     def fit(self, X, y):
-        print("fit")
         self.tree = self.__split(X, y)
         return self
 
@@ -49,7 +48,6 @@ class MyDecisionTree(BaseEstimator, ClassifierMixin):
        
     def __split_column(self, X, y, column_name):
         best_value, best_cost = None, 1000
-        print(self.__enumerate_split_points(X[column_name]))
         for val in self.__enumerate_split_points(X[column_name]):
             cost = self.__calc_cost_for_value(X, y, column_name, val)
             
