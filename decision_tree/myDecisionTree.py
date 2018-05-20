@@ -1,6 +1,5 @@
 from sklearn.base import BaseEstimator, ClassifierMixin
 import numpy as np
-import math
 
 
 class MyDecisionTree(BaseEstimator, ClassifierMixin):
@@ -13,6 +12,7 @@ class MyDecisionTree(BaseEstimator, ClassifierMixin):
             self.right = right
         
     def fit(self, X, y):
+        print("fit")
         self.tree = self.__split(X, y)
         return self
 
@@ -35,30 +35,24 @@ class MyDecisionTree(BaseEstimator, ClassifierMixin):
                 best_val = val
 
         left_node, right_node = self.__split_by_value(X, best_column, best_val)
-        leftX, lefty = X[left_node].drop(best_column, axis=1), y[left_node]
-        rightX, righty = X[right_node].drop(best_column, axis=1), y[right_node]
+        leftX, leftY = X[left_node].drop(best_column, axis=1), y[left_node]
+        rightX, rightY = X[right_node].drop(best_column, axis=1), y[right_node]
         
         if len(leftX) > 0 and len(rightX) > 0:
-            l = self.__split(leftX, lefty)
-            r = self.__split(rightX, righty)
-            return MyDecisionTree.Node(
-                best_column, 
-                best_val,
-                None,
-                l,
-                r
-            )
+            l = self.__split(leftX, leftY)
+            r = self.__split(rightX, rightY)
+            return MyDecisionTree.Node(best_column, best_val,None, l, r)
         elif len(leftX) > 0:
-            return MyDecisionTree.Node(best_column, best_val, lefty.ravel()[0])
+            return MyDecisionTree.Node(best_column, best_val, leftY.ravel()[0])
         else: 
-            return MyDecisionTree.Node(best_column, best_val, righty.ravel()[0])
+            return MyDecisionTree.Node(best_column, best_val, rightY.ravel()[0])
        
     def __split_column(self, X, y, column_name):
         best_value, best_cost = None, 1000
+        print(self.__enumerate_split_points(X[column_name]))
         for val in self.__enumerate_split_points(X[column_name]):
             cost = self.__calc_cost_for_value(X, y, column_name, val)
             
-            # let's be greedy
             if cost == 0:
                 return (val, cost)
             elif cost < best_cost:
@@ -79,10 +73,14 @@ class MyDecisionTree(BaseEstimator, ClassifierMixin):
             
     def __calc_cost_for_value(self, X, y, column_name, value):
         left_node, right_node = self.__split_by_value(X, column_name, value)
-        left, right = X[left_node], X[right_node]
+        left  = X[left_node]
+        right = X[right_node]
         
-        ll, lr = y[left_node][y == 1], y[left_node][y == 0]
-        rl, rr = y[right_node][y == 1], y[right_node][y == 0]
+        ll = y[left_node][y == 1]
+        lr = y[left_node][y == 0]
+
+        rl = y[right_node][y == 1] 
+        rr = y[right_node][y == 0]
         
         lgini = self.__gini_index(np.array([len(ll), len(lr)]))
         rgini = self.__gini_index(np.array([len(rl), len(rr)]))
